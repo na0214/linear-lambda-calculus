@@ -1,0 +1,17 @@
+ast.cmi
+ast.cmx
+ast.o
+main.cmi
+main.cmo
+main.cmx
+main.o
+type.cmi
+type.cmx
+type.o
+.omakedb
+.omakedb.lock
+OMakefile.omc
+Omakeroot.omc
+linearlam.opt
+linearlam
+.DS_Store

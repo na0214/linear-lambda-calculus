@@ -1,0 +1,4 @@
+BYTE_ENABLED = true
+.SUBDIRS: src
+OCamlProgram(linearlam,src/ast src/main src/type)
+.DEFAULT: linearlam$(EXE)
