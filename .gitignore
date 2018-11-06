@@ -23,6 +23,10 @@ lexer.cmi
 lexer.cmo
 lexer.cmx
 lexer.o
+lexer.ml
+lexer.mll
 parser.cmi
 parser.cmx
 parser.o
+parser.ml
+parser.mli
