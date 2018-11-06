@@ -15,3 +15,7 @@ Omakeroot.omc
 linearlam.opt
 linearlam
 .DS_Store
+typecheck.cmi
+typecheck.cmx
+typecheck.cmo
+typecheck.o
