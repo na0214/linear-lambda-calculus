@@ -8,3 +8,5 @@ type term =
   | Split of term * string * string * term
   | Abs of Type.qual * string * Type.ltype * term
   | App of term * term;;
+
+type toplevel = (string * term) list;;

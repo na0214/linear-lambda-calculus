@@ -19,3 +19,10 @@ typecheck.cmi
 typecheck.cmx
 typecheck.cmo
 typecheck.o
+lexer.cmi
+lexer.cmo
+lexer.cmx
+lexer.o
+parser.cmi
+parser.cmx
+parser.o

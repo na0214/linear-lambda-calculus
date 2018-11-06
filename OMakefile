@@ -1,4 +1,5 @@
 BYTE_ENABLED = true
 .SUBDIRS: src
-OCamlProgram(linearlam,src/ast src/main src/type src/typecheck)
+OCamlGeneratedFiles(src/lexer.ml src/parser.mli src/parser.ml)
+OCamlProgram(linearlam,src/ast src/main src/type src/typecheck src/lexer src/parser)
 .DEFAULT: linearlam$(EXE)

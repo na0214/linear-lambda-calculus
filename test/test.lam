@@ -1,0 +1,1 @@
+let discard = un #x:lin Bool.x;
