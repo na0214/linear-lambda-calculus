@@ -3,6 +3,7 @@ type checkT = Type.ltype * Type.context;;
 exception TypeError of string * string;;
 exception ContextError;;
 exception QualError;;
+exception UnUsedError of string;;
 
 let check_equal (t1 : Type.ltype) (t2 : Type.ltype) : unit =
   if t1 = t2 then () else raise (TypeError (Type.type_of_string t1,Type.type_of_string t2));;
@@ -24,7 +25,9 @@ let check_equal_const (t1 : Type.ltype) (t2 : Type.ltype) : unit =
   check_equal (erase_type t1) (erase_type t2);;
 
 let check_equal_context (context1 : Type.context) (context2 : Type.context) : unit =
-  if List.for_all2 (fun c1 -> fun c2 -> c1 = c2) context1 context2 then () else raise ContextError;;
+  if List.length context1 <> List.length context2 then raise ContextError else
+    let exists_context c1 c2 = List.fold_left (fun x -> fun (n,_) -> List.exists (fun (y,_) -> n == y) c1 && x) true c2 in
+    if exists_context context1 context2 && exists_context context2 context1 then () else raise ContextError;;
 
 let t_var (name : string) (context : Type.context) : checkT =
   let var_type = List.assoc name context in
@@ -63,6 +66,9 @@ and t_app (term1 : Ast.term) (term2 : Ast.term) (context : Type.context) : check
   let (term2_t,context3) = type_check term2 context2 in
   let (Type.Fn (_,t11,t12)) = term1_t in check_equal t11 term2_t; (t12,context3)
 and t_abs (qual : Type.qual) (name : string) (vtype : Type.ltype) (term_body : Ast.term) (context : Type.context) : checkT =
+  if Type.check_qual_contain_type (Type.get_qual vtype) vtype then () else raise QualError;
   let (term_body_t,context2) = type_check term_body ((name,vtype) :: context) in
+  if Type.check_qual_contain_type qual term_body_t then () else raise QualError;
+  if Type.get_qual vtype = Type.Lin && List.mem_assoc name context2 then raise (UnUsedError name) else ();
   if qual = Type.Un then check_equal_context context (List.remove_assoc name context2) else ();
   (Type.Fn (qual,vtype,term_body_t),List.remove_assoc name context2);;

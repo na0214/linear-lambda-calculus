@@ -21,10 +21,12 @@ rule token = parse
           | '#' { LAMBDA }
           | ':' { COLON }
           | '*' { MULTI }
+          | '(' { LPAREN }
+          | ')' { RPAREN }
           | "->" { ARROW }
           | "in" { IN }
           | "split" { SPLIT }
           | "as" { AS }
-          | "Bool" { BoolT }
+          | "bool" { BoolT }
           | ['a'-'z' 'A'-'Z' '0'-'9']+ { ID(Lexing.lexeme lexbuf) }
           | eof { Eof }

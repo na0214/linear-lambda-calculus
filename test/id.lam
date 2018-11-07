@@ -1,0 +1,3 @@
+let id = lin #x:lin bool.x;
+
+let main = id (lin true);

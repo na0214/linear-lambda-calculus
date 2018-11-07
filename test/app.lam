@@ -1,0 +1,3 @@
+let rtfn = lin #x:lin bool. (lin #y:lin (lin bool -> lin bool).y x);
+
+let main = (rtfn (lin true)) (lin #x:lin bool.x);

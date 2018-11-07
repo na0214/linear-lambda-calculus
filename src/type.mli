@@ -12,3 +12,4 @@ val check_qual_contain_type : qual -> ltype -> bool;;
 val check_qual_contain_context : qual -> context -> bool;;
 val qual_of_string : qual -> string;;
 val type_of_string : ltype -> string;;
+val print_context : context -> unit;;

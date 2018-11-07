@@ -1,8 +1,6 @@
-type boolean = True | False
-
 type term =
     Var of string
-  | Boolean of Type.qual * boolean
+  | Boolean of Type.qual * bool
   | If of term * term * term
   | Pair of Type.qual * term * term
   | Split of term * string * string * term
@@ -10,3 +8,5 @@ type term =
   | App of term * term;;
 
 type toplevel = (string * term) list;;
+
+val print_ast : term -> string;;

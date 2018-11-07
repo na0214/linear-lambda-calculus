@@ -24,13 +24,16 @@ let rec type_of_string (t : ltype) : string =
   | Pair (q,t1,t2) -> qual_of_string q ^ " (" ^ type_of_string t1 ^ "," ^ type_of_string t2 ^ ")"
   | Fn (q,t1,t2) -> qual_of_string q ^ " (" ^ type_of_string t1 ^ "->" ^ type_of_string t2 ^ ")";;
 
+let print_context (con : context) : unit =
+  let _ = List.map (fun (x,y) -> print_string ("(" ^ x ^ "," ^ type_of_string y ^ ")\n")) con in ();;
+
 let check_qual_contain_type' (q : qual) (q' : qual) : bool = not (q = Un && q' = Lin);;
 
 let rec check_qual_contain_type (q : qual) (t : ltype) : bool =
   match t with
-    Bool q' -> check_qual_contain_type q' t
-  | Pair (q',t1,t2) -> (check_qual_contain_type q t1) && (check_qual_contain_type q t2) && (check_qual_contain_type' q q')
-  | Fn (q',t1,t2) -> (check_qual_contain_type q t1) && (check_qual_contain_type q t2) && (check_qual_contain_type' q q');;
+    Bool q' -> check_qual_contain_type' q q'
+  | Pair (q',t1,t2) -> (check_qual_contain_type q' t1) && (check_qual_contain_type q' t2) && (check_qual_contain_type' q q')
+  | Fn (q',t1,t2) -> (check_qual_contain_type q' t1) && (check_qual_contain_type q' t2) && (check_qual_contain_type' q q');;
 
 let check_qual_contain_context (q : qual) (con : context) : bool =
   List.for_all (function (_,t) -> check_qual_contain_type q t) con;;

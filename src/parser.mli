@@ -21,6 +21,8 @@ type token =
   | AS
   | BoolT
   | Eof
+  | LPAREN
+  | RPAREN
 
 val toplevel :
   (Lexing.lexbuf  -> token) -> Lexing.lexbuf -> Ast.toplevel

@@ -2,11 +2,14 @@
 %token <Type.qual> QUAL
 %token <bool> BOOL
 %token LET EQ SEMICOLON IF THEN ELSE COMMA LEFT RIGHT
-%token DOT LAMBDA COLON MULTI ARROW IN SPLIT AS BoolT Eof
+%token DOT LAMBDA COLON MULTI ARROW IN SPLIT AS BoolT Eof LPAREN RPAREN
+
+%right ARROW
+%right QUAL
 
 %type <Ast.toplevel> toplevel
 %type <Ast.term> term simpleterm
-%type <Type.ltype> qualtype type
+%type <Type.ltype> qualtype
 
 %start toplevel
 
@@ -31,25 +34,19 @@ term:
 
 simpleterm:
       ID { Ast.Var $1 }
-    | QUAL BOOL { Ast.Boolean ($1,(if $2 then Ast.True else Ast.False)) }
+    | QUAL BOOL { Ast.Boolean ($1,$2) }
     | IF term THEN term ELSE term { Ast.If ($2,$4,$6) }
     | QUAL LEFT term COMMA term RIGHT { Ast.Pair ($1,$3,$5) }
     | SPLIT term AS ID COMMA ID IN term { Ast.Split ($2,$4,$6,$8) }
     | QUAL LAMBDA ID COLON qualtype DOT term { Ast.Abs ($1,$3,$5,$7) }
+    | LPAREN term RPAREN { $2 }
     ;
 
-qualtype:
-     QUAL type
-     {
-        (match $2 with
-           Type.Bool _ -> Type.Bool $1
-         | Type.Pair (_,t1,t2) -> Type.Pair ($1,t1,t2)
-         | Type.Fn (_,t1,t2) -> Type.Fn ($1,t1,t2))
-     }
-     ;
 
-type:
-      BoolT { Type.Bool Type.Un }
-    | qualtype MULTI qualtype { Type.Pair (Type.Un,$1,$3) }
-    | qualtype ARROW qualtype { Type.Fn (Type.Un,$1,$3) }
+
+qualtype:
+      QUAL BoolT { Type.Bool $1 }
+    | QUAL LPAREN qualtype MULTI qualtype RPAREN { Type.Pair ($1,$3,$5) }
+    | QUAL LPAREN qualtype ARROW qualtype RPAREN { Type.Fn ($1,$3,$5) }
+    | LPAREN qualtype RPAREN { $2 }
     ;

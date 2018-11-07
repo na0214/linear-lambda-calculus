@@ -1,0 +1,3 @@
+let f = lin #x:lin bool.lin true;
+
+let main = f (lin true);
