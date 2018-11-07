@@ -1,0 +1,5 @@
+let fst = lin #x:lin (un bool * un bool).split x as p,q in p;
+
+let id = lin #x:lin (un bool * un bool).fst x;
+
+let main = fst (lin <id (un true),un true>);

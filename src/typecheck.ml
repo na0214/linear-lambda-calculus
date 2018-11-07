@@ -30,7 +30,7 @@ let check_equal_context (context1 : Type.context) (context2 : Type.context) : un
     if exists_context context1 context2 && exists_context context2 context1 then () else raise ContextError;;
 
 let t_var (name : string) (context : Type.context) : checkT =
-  let var_type = List.assoc name context in
+  let var_type = try List.assoc name context with Not_found -> print_string ("Variable " ^ name ^ " is already used or not defined\n"); exit 0 in
   let qual = Type.get_qual var_type in
   match qual with
     Type.Un -> (var_type,context)
@@ -60,7 +60,10 @@ and t_pair (qual : Type.qual) (term1 : Ast.term) (term2 : Ast.term) (context : T
 and t_split (term1 : Ast.term) (x : string) (y : string) (term_body : Ast.term) (context : Type.context) : checkT =
   let (term1_t,context2) = type_check term1 context in check_equal_const term1_t (Type.Pair (Type.Un,Type.Bool Type.Un,Type.Bool Type.Un));
   let Type.Pair (_,x_t,y_t) = term1_t in
-  let (term_body_t,context3) = type_check term_body ((x,x_t) :: (y,y_t) :: context2) in (term_body_t,List.remove_assoc y (List.remove_assoc x context3))
+  let (term_body_t,context3) = type_check term_body ((x,x_t) :: (y,y_t) :: context2) in
+  if Type.get_qual x_t = Type.Lin && List.mem_assoc x context3 then raise (UnUsedError x) else
+  if Type.get_qual y_t = Type.Lin && List.mem_assoc y context3 then raise (UnUsedError y) else ();
+    (term_body_t,List.remove_assoc y (List.remove_assoc x context3))
 and t_app (term1 : Ast.term) (term2 : Ast.term) (context : Type.context) : checkT =
   let (term1_t,context2) = type_check term1 context in check_equal_const term1_t (Type.Fn (Type.Un,Type.Bool Type.Un,Type.Bool Type.Un));
   let (term2_t,context3) = type_check term2 context2 in
