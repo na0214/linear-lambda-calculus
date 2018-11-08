@@ -1,0 +1,3 @@
+let fst = lin #x:lin (un bool * un bool).split x as p,q in p;
+
+let main = fst (lin <un true,un true>);

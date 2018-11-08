@@ -1,0 +1,3 @@
+let f = un #x:un bool.x;
+
+let main = lin <f (un true),f (un true)>;
