@@ -1,6 +1,6 @@
 # Linear Lambda Calculus
 
-OCamlによる、線形ラムダ計算の型システムの実装です。
+Advanced Topics in Types and Programming Languages 1章を参考にして作成した、OCamlによる、線形ラムダ計算の型システムの実装です。
 以下のような構文を持ちます
 
 ```
